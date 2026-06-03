@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WURL | Official Artist Page</title>
+    <style>
+        /* Base Styling & Grain Aesthetic */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #121010;
+            /* Fallback color matching the image tone */
+            background-image: linear-gradient(rgba(18, 16, 16, 0.85), rgba(18, 16, 16, 0.85)), url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #e5e5e5;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 0.15em;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Subtle noise/static overlay effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        /* Header Styling */
+        header {
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: #8c8888;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .artist-name {
+            font-size: 0.75rem;
+            color: #615d5d;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        /* Music Block Section */
+        .music-section {
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: #aba6a6;
+            margin-bottom: 25px;
+            text-align: left;
+            border-left: 2px solid #ffffff;
+            padding-left: 10px;
+            width: 100%;
+        }
+
+        /* Album Artwork Cover styling */
+        .album-cover {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px;
+        }
+
+        /* Custom Listen Button */
+        .listen-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            transition: all 0.3s ease;
+        }
+
+        .listen-btn:hover {
+            background: #ffffff;
+            color: #121010;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Links / Navigation */
+        .links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .artist-link {
+            display: block;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .artist-link:hover {
+            background: #ffffff;
+            color: #121010;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            font-size: 0.7rem;
+            color: #575454;
+            padding: 20px 0;
+            line-height: 1.5;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 20px 15px; }
+            .album-cover { max-width: 240px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>WURL</h1>
+            <div class="subtitle">Wrist Undone, Ribs laced</div>
+            <div class="artist-name">Aven Bjourn Gilbert</div>
+        </header>
+
+        <section class="music-section">
+            <div class="section-title">Latest Release</div>
+            <img src="cover.jpg" alt="Latest Release Artwork" class="album-cover">
+            <a href="https://open.spotify.com/track/2fGvsOBkmiW1xmwKlyJ17a?si=11c31772109748e1" target="_blank" class="listen-btn">Listen Now</a>
+        </section>
+
+        <section class="links-list">
+            <div class="section-title">Platforms & Contact</div>
+            <a href="https://open.spotify.com/artist/1FZaXOqY9gZZ9uIPwDF9JH?si=FXdjYp13QyaDpMxuPo4owA" target="_blank" class="artist-link">Spotify Profile</a>
+            <a href="https://music.apple.com/us/artist/wurl/6775261857" target="_blank" class="artist-link">Apple Music</a>
+            <a href="https://instagram.com/wurllol" target="_blank" class="artist-link">Instagram (@wurllol)</a>
+            <a href="mailto:rightunder@gmail.com" class="artist-link">Contact: rightunder@gmail.com</a>
+        </section>
+
+        <footer>
+            © 2026 WURL. All Rights Reserved.<br>
+            Aven Bjourn Gilbert
+        </footer>
+
+    </div>
+
+</body>
+</html>
