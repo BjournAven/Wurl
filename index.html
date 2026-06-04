@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WURL | Official Artist Page</title>
+    <title>WURL | Official Page</title>
     <style>
-        /* Base Styling & Grain Aesthetic */
+        /* 1. SETUP & GLOBAL STYLES */
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +14,6 @@
 
         body {
             background-color: #121010;
-            /* Fallback color matching the image tone */
             background-image: linear-gradient(rgba(18, 16, 16, 0.85), rgba(18, 16, 16, 0.85)), url('background.jpg');
             background-size: cover;
             background-position: center;
@@ -23,12 +22,13 @@
             font-family: 'Courier New', Courier, monospace;
             letter-spacing: 0.15em;
             display: flex;
-            flex-direction: column;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+            transition: background-color 0.5s ease;
         }
 
-        /* Subtle noise/static overlay effect */
+        /* Ambient Grain Texture Layer */
         body::before {
             content: "";
             position: fixed;
@@ -39,45 +39,202 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
-        /* Layout Container */
+        /* DYNAMIC KISHIBE COLLAGE BACKGROUND CONTAINER */
+        .collage-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0;
+            visibility: hidden;
+            background-color: #241f20; /* Slightly lighter base brown */
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            overflow: hidden;
+        }
+
+        /* Base backdrop tint (made the center cleaner and edges softer) */
+        .collage-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(28, 24, 25, 0.2) 0%, rgba(16, 13, 14, 0.85) 80%);
+            z-index: 2;
+        }
+
+        /* Abstract Collage Elements */
+        .collage-piece {
+            position: absolute;
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(20%) contrast(115%) brightness(65%); /* Boosted brightness and decreased grayscale */
+            mix-blend-mode: normal; /* Switched to normal to keep original vibrancy intact */
+            opacity: 0.5; /* Boosted visibility layer wide */
+            pointer-events: none;
+        }
+
+        .piece-1 {
+            top: -5%;
+            left: -5%;
+            width: 55vw;
+            height: 60vh;
+            background-image: url('cover.jpg');
+            transform: rotate(-4deg);
+        }
+
+        .piece-2 {
+            bottom: -5%;
+            right: -2%;
+            width: 52vw;
+            height: 65vh;
+            background-image: url('art1.jpg');
+            transform: rotate(3deg);
+            opacity: 0.45; /* Adjusted transparency for the brighter palette */
+        }
+
+        .piece-3 {
+            bottom: 15%;
+            left: -3%;
+            width: 42vw;
+            height: 45vh;
+            background-image: url('art2.jpg');
+            transform: rotate(-8deg);
+            filter: grayscale(30%) contrast(110%) brightness(55%);
+        }
+
+        /* Activate collage state when theme class is on body */
+        body.kishibe-theme .collage-bg {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 2. SLIDE-OUT SIDEBAR NAVIGATION */
+        .menu-toggle {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            background: rgba(18, 16, 16, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1.5rem;
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: #ffffff;
+            color: #121010;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        nav.sidebar {
+            width: 280px;
+            background: rgba(10, 8, 8, 0.98);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 100px 30px 40px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: -280px;
+            z-index: 15;
+            transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.7);
+        }
+
+        nav.sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-brand {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: #8c8888;
+            font-family: inherit;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            text-align: left;
+            cursor: pointer;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        .menu-btn:hover, .menu-btn.active {
+            color: #ffffff;
+            padding-left: 8px;
+        }
+
+        /* 3. SCENE AND LAYOUT PANELS */
+        .main-content {
+            width: 100%;
+            padding: 120px 40px 60px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 5;
+        }
+
         .container {
             max-width: 800px;
             width: 100%;
             margin: auto;
-            padding: 40px 20px;
             text-align: center;
         }
 
-        /* Header Styling */
-        header {
-            margin-bottom: 60px;
+        .page-panel {
+            display: none;
         }
 
+        .page-panel.active-panel {
+            display: block;
+        }
+
+        /* Typography Hierarchy */
+        header { margin-bottom: 60px; }
         h1 {
             font-size: 3.5rem;
             font-weight: 900;
             color: #ffffff;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
-
         .subtitle {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #8c8888;
             text-transform: uppercase;
             margin-bottom: 10px;
         }
-
         .artist-name {
             font-size: 0.75rem;
             color: #615d5d;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.25em;
         }
 
-        /* Music Block Section */
-        .music-section {
-            margin-bottom: 50px;
+        /* Content Blocks */
+        .content-section {
+            margin-bottom: 60px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 30px 20px;
@@ -98,20 +255,19 @@
             width: 100%;
         }
 
-        /* Album Artwork Cover styling */
-        .album-cover {
+        .display-img {
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
             height: auto;
             aspect-ratio: 1 / 1;
             object-fit: cover;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             margin-bottom: 25px;
         }
 
-        /* Custom Listen Button */
-        .listen-btn {
+        /* Action Targets */
+        .btn {
             display: inline-block;
             padding: 15px 40px;
             background: transparent;
@@ -121,26 +277,23 @@
             text-transform: uppercase;
             font-size: 0.85rem;
             font-weight: bold;
-            letter-spacing: 0.2em;
             transition: all 0.3s ease;
         }
 
-        .listen-btn:hover {
+        .btn:hover {
             background: #ffffff;
             color: #121010;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
 
-        /* Links / Navigation */
-        .links-list {
+        .link-stack {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-bottom: 50px;
+            width: 100%;
         }
 
-        .artist-link {
+        .link-item {
             display: block;
             padding: 18px;
             background: rgba(255, 255, 255, 0.03);
@@ -152,60 +305,174 @@
             transition: all 0.3s ease;
         }
 
-        .artist-link:hover {
+        .link-item:hover {
             background: #ffffff;
             color: #121010;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
         }
 
-        /* Footer */
         footer {
-            margin-top: auto;
             font-size: 0.7rem;
             color: #575454;
-            padding: 20px 0;
-            line-height: 1.5;
+            padding: 40px 0;
+            line-height: 1.8;
         }
 
-        /* Responsive adjustments */
+        /* --- 4. KISHIBE SPECIFIC PALETTE & UI STYLES --- */
+        body.kishibe-theme {
+            background-color: #1c1819;
+            background-image: none; /* Disables standard bg to showcase collage layer */
+            color: #e3dcd2;
+        }
+
+        body.kishibe-theme .menu-toggle {
+            background: rgba(28, 24, 25, 0.8);
+            border: 1px solid rgba(196, 154, 108, 0.2);
+            color: #e3dcd2;
+        }
+
+        body.kishibe-theme nav.sidebar {
+            background: rgba(20, 17, 18, 0.99);
+            border-right: 1px solid rgba(196, 154, 108, 0.15);
+        }
+
+        body.kishibe-theme .sidebar-brand { color: #caa5a9; }
+        body.kishibe-theme .menu-btn.active { color: #d1b48c; }
+
+        body.kishibe-theme #kishibe-page h1 { color: #caa5a9; } 
+        body.kishibe-theme #kishibe-page .subtitle { color: #c49a6c; } 
+        body.kishibe-theme #kishibe-page .section-title { 
+            color: #caa5a9; 
+            border-left-color: #c49a6c; 
+        }
+
+        body.kishibe-theme .link-item {
+            background: rgba(255, 255, 255, 0.03); /* Lighter container box backdrop */
+            border-color: rgba(202, 165, 169, 0.3);
+            color: #e3dcd2;
+            backdrop-filter: blur(8px); /* Higher clarity against the brighter background */
+        }
+
+        body.kishibe-theme .link-item:hover {
+            background: #c49a6c;
+            color: #1c1819;
+            box-shadow: 0 0 15px rgba(196, 154, 108, 0.2);
+        }
+
+        /* --- 5. RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            .collage-piece { opacity: 0.35; }
+            .piece-1 { width: 80vw; height: 40vh; }
+            .piece-2 { width: 80vw; height: 40vh; }
+            .piece-3 { display: none; }
+        }
+
         @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .container { padding: 20px 15px; }
-            .album-cover { max-width: 240px; }
+            .main-content { padding: 100px 20px 20px 20px; }
+            h1 { font-size: 2.2rem; }
+            nav.sidebar { width: 240px; left: -240px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        
-        <header>
-            <h1>WURL</h1>
-            <div class="subtitle">Wrist Undone, Ribs laced</div>
-            <div class="artist-name">Aven Bjourn Gilbert</div>
-        </header>
-
-        <section class="music-section">
-            <div class="section-title">Latest Release</div>
-            <img src="cover.jpg" alt="Latest Release Artwork" class="album-cover">
-            <a href="https://open.spotify.com/track/2fGvsOBkmiW1xmwKlyJ17a?si=11c31772109748e1" target="_blank" class="listen-btn">Listen Now</a>
-        </section>
-
-        <section class="links-list">
-            <div class="section-title">Platforms & Contact</div>
-            <a href="https://open.spotify.com/artist/1FZaXOqY9gZZ9uIPwDF9JH?si=FXdjYp13QyaDpMxuPo4owA" target="_blank" class="artist-link">Spotify Profile</a>
-            <a href="https://music.apple.com/us/artist/wurl/6775261857" target="_blank" class="artist-link">Apple Music</a>
-            <a href="https://instagram.com/wurllol" target="_blank" class="artist-link">Instagram (@wurllol)</a>
-            <a href="mailto:rightunder@gmail.com" class="artist-link">Contact: rightunder@gmail.com</a>
-        </section>
-
-        <footer>
-            © 2026 WURL. All Rights Reserved.<br>
-            Aven Bjourn Gilbert
-        </footer>
-
+    <div class="collage-bg">
+        <div class="collage-piece piece-1"></div>
+        <div class="collage-piece piece-2"></div>
+        <div class="collage-piece piece-3"></div>
     </div>
+
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <nav class="sidebar" id="sidebarNav">
+        <div class="sidebar-brand">Portal</div>
+        <div class="menu-links">
+            <button class="menu-btn active" onclick="switchPage('wurl-page', this, 'wurl')">WURL</button>
+            <button class="menu-btn" onclick="switchPage('kishibe-page', this, 'kishibe')">Kishibe</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+
+            <div id="wurl-page" class="page-panel active-panel">
+                <header>
+                    <p class="subtitle">Wrist Undone, Ribs laced</p>
+                    <h1>WURL</h1>
+                    <p class="artist-name">Aven Bjourn Gilbert</p>
+                </header>
+
+                <section class="content-section">
+                    <div class="section-title">Latest Release</div>
+                    <img src="cover.jpg" alt="WURL cover" class="display-img">
+                    <a href="https://open.spotify.com/track/2fGvsOBkmiW1xmwKlyJ17a?si=11c31772109748e1" target="_blank" class="btn">Listen Now</a>
+                </section>
+
+                <div class="link-stack">
+                    <div class="section-title">Platforms</div>
+                    <a href="https://open.spotify.com/artist/1FZaXOqY9gZZ9uIPwDF9JH?si=FXdjYp13QyaDpMxuPo4owA" target="_blank" class="link-item">Spotify Profile</a>
+                    <a href="https://music.apple.com/us/artist/wurl/6775261857" target="_blank" class="link-item">Apple Music</a>
+                    <a href="https://instagram.com/wurllol" target="_blank" class="link-item">Instagram</a>
+                    <a href="mailto:rightunder@gmail.com" class="link-item">Contact</a>
+                </div>
+
+                <footer>
+                    © 2026 WURL. All Rights Reserved.<br>Aven Bjourn Gilbert.
+                </footer>
+            </div>
+
+            <div id="kishibe-page" class="page-panel">
+                <header>
+                    <p class="subtitle">Vocalist/Artist</p>
+                    <h1>Kishibe</h1>
+                    <p class="artist-name">Giovanni Fabien Malapitan Rodriguez</p>
+                </header>
+
+                <div class="link-stack" style="margin-top: 40px;">
+                    <div class="section-title">Business & Network</div>
+                    <a href="mailto:Kshbe0x@gmail.com" class="link-item">Inquiries: Kshbe0x@gmail.com</a>
+                </div>
+
+                <footer>
+                    © 2026 Kishibe. All Rights Reserved.<br>Giovanni Fabien Malapitan Rodriguez.
+                </footer>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const sidebar = document.getElementById('sidebarNav');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+        }
+
+        function switchPage(pageId, buttonElement, themeName) {
+            const panels = document.querySelectorAll('.page-panel');
+            panels.forEach(p => p.classList.remove('active-panel'));
+            document.getElementById(pageId).classList.add('active-panel');
+            
+            const buttons = document.querySelectorAll('.menu-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            buttonElement.classList.add('active');
+            
+            if (themeName === 'kishibe') {
+                document.body.classList.add('kishibe-theme');
+            } else {
+                document.body.classList.remove('kishibe-theme');
+            }
+            
+            sidebar.classList.remove('open');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('click', function(e) {
+            const toggleBtn = document.querySelector('.menu-toggle');
+            if (!sidebar.contains(e.target) && e.target !== toggleBtn && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
 
 </body>
 </html>
