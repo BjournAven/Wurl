@@ -449,9 +449,9 @@
     <nav class="sidebar" id="sidebarNav">
         <div class="sidebar-brand">Portal</div>
         <div class="menu-links">
-            <button class="menu-btn active" onclick="switchPage('wurl-page', this, 'wurl')">WURL</button>
-            <button class="menu-btn" onclick="switchPage('kishibe-page', this, 'kishibe')">Kishibe</button>
-            <button class="menu-btn" onclick="switchPage('collab-auth-page', this, 'wurl')">Collaborations</button>
+            <button class="menu-btn active" id="btn-wurl" onclick="navigateToHash('wurl')">WURL</button>
+            <button class="menu-btn" id="btn-kishibe" onclick="navigateToHash('kishibe')">Kishibe</button>
+            <button class="menu-btn" id="btn-collaborations" onclick="navigateToHash('collaborations')">Collaborations</button>
         </div>
     </nav>
 
@@ -566,36 +566,57 @@
 
     <script>
         const sidebar = document.getElementById('sidebarNav');
-        // Define your secure access key sequence here
         const MASTER_KEY = "COLLAB2026"; 
+        let isUnlocked = false; // Persistent state for the session
 
         function toggleSidebar() {
             sidebar.classList.toggle('open');
         }
 
-        function switchPage(pageId, buttonElement, themeName) {
+        // Updates the URL hash variable directly
+        function navigateToHash(hashPath) {
+            window.location.hash = hashPath;
+            sidebar.classList.remove('open');
+        }
+
+        // Processes and shifts page layout cleanly based on active URL route
+        function renderPageFromHash() {
+            const currentHash = window.location.hash.replace('#', '') || 'wurl';
+            
             const panels = document.querySelectorAll('.page-panel');
             panels.forEach(p => p.classList.remove('active-panel'));
-            document.getElementById(pageId).classList.add('active-panel');
             
             const buttons = document.querySelectorAll('.menu-btn');
             buttons.forEach(b => b.classList.remove('active'));
-            if (buttonElement) buttonElement.classList.add('active');
-            
-            if (themeName === 'kishibe') {
+
+            if (currentHash === 'kishibe') {
+                document.getElementById('kishibe-page').classList.add('active-panel');
+                document.getElementById('btn-kishibe').classList.add('active');
                 document.body.classList.add('kishibe-theme');
+            } else if (currentHash === 'collaborations') {
+                document.getElementById('btn-collaborations').classList.add('active');
+                document.body.classList.remove('kishibe-theme');
+                
+                // Route conditionally based on password verification state
+                if (isUnlocked) {
+                    document.getElementById('instrumentals-page').classList.add('active-panel');
+                } else {
+                    document.getElementById('collab-auth-page').classList.add('active-panel');
+                }
             } else {
+                // Fallback default: 'wurl'
+                document.getElementById('wurl-page').classList.add('active-panel');
+                document.getElementById('btn-wurl').classList.add('active');
                 document.body.classList.remove('kishibe-theme');
             }
-            
-            sidebar.classList.remove('open');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Clear password inputs and errors when exiting gateway views
-            if(pageId !== 'collab-auth-page') {
+            // Cleanup hidden verification components
+            if (currentHash !== 'collaborations') {
                 document.getElementById('gatekeeperCode').value = '';
                 document.getElementById('authError').style.display = 'none';
             }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function verifyGateCode() {
@@ -604,19 +625,18 @@
             
             if (inputField.value === MASTER_KEY) {
                 errorText.style.display = 'none';
-                // Transition inside instrumental panel repository
-                switchPage('instrumentals-page', null, 'wurl');
-                // Keep collaboration button highlighted 
-                const navButtons = document.querySelectorAll('.menu-btn');
-                navButtons.forEach(btn => {
-                    if(btn.textContent.trim() === 'Collaborations') btn.classList.add('active');
-                });
+                isUnlocked = true; // Set lock flag to active
+                renderPageFromHash(); // Refresh view state
             } else {
                 errorText.style.display = 'block';
                 inputField.value = '';
                 inputField.focus();
             }
         }
+
+        // Setup window event handlers to trigger whenever routing hash changes or page boots up
+        window.addEventListener('hashchange', renderPageFromHash);
+        window.addEventListener('DOMContentLoaded', renderPageFromHash);
 
         document.addEventListener('click', function(e) {
             const toggleBtn = document.querySelector('.menu-toggle');
