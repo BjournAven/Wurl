@@ -388,6 +388,7 @@
         <div class="menu-links">
             <button class="menu-btn active" onclick="switchPage('wurl-page', this, 'wurl')">WURL</button>
             <button class="menu-btn" onclick="switchPage('kishibe-page', this, 'kishibe')">Kishibe</button>
+            <button class="menu-btn" onclick="checkVaultCode(this)">Unreleased</button>
         </div>
     </nav>
 
@@ -437,11 +438,31 @@
                 </footer>
             </div>
 
+            <div id="unreleased-page" class="page-panel">
+                <header>
+                    <p class="subtitle">Classified Audio Archival</p>
+                    <h1>The Vault</h1>
+                    <p class="artist-name">Unreleased Material</p>
+                </header>
+
+                <div class="link-stack" style="margin-top: 40px;">
+                    <div class="section-title">Exclusive Demos</div>
+                    <a href="#" class="link-item">Track 01 - Demo Snippet (2026)</a>
+                    <a href="#" class="link-item">Track 02 - Rough Mix</a>
+                </div>
+
+                <footer>
+                    © 2026 Vault Records. Restricted Access.
+                </footer>
+            </div>
+
         </div>
     </main>
 
     <script>
         const sidebar = document.getElementById('sidebarNav');
+        // Define your secret code here
+        const VAULT_CODE = "SECRET2026"; 
 
         function toggleSidebar() {
             sidebar.classList.toggle('open');
@@ -464,6 +485,18 @@
             
             sidebar.classList.remove('open');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function checkVaultCode(buttonElement) {
+            const userInput = prompt("Enter access code to unlock the vault:");
+            
+            if (userInput === VAULT_CODE) {
+                // If code is correct, load the hidden vault panel using standard theme layout
+                switchPage('unreleased-page', buttonElement, 'wurl');
+            } else if (userInput !== null) {
+                alert("Access Denied. Incorrect Code.");
+                sidebar.classList.remove('open');
+            }
         }
 
         document.addEventListener('click', function(e) {
