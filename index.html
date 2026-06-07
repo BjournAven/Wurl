@@ -49,12 +49,11 @@
             z-index: -1;
             opacity: 0;
             visibility: hidden;
-            background-color: #241f20; /* Slightly lighter base brown */
+            background-color: #241f20;
             transition: opacity 0.6s ease, visibility 0.6s ease;
             overflow: hidden;
         }
 
-        /* Base backdrop tint (made the center cleaner and edges softer) */
         .collage-bg::before {
             content: "";
             position: absolute;
@@ -63,14 +62,13 @@
             z-index: 2;
         }
 
-        /* Abstract Collage Elements */
         .collage-piece {
             position: absolute;
             background-size: cover;
             background-position: center;
-            filter: grayscale(20%) contrast(115%) brightness(65%); /* Boosted brightness and decreased grayscale */
-            mix-blend-mode: normal; /* Switched to normal to keep original vibrancy intact */
-            opacity: 0.5; /* Boosted visibility layer wide */
+            filter: grayscale(20%) contrast(115%) brightness(65%);
+            mix-blend-mode: normal;
+            opacity: 0.5;
             pointer-events: none;
         }
 
@@ -90,7 +88,7 @@
             height: 65vh;
             background-image: url('art1.jpg');
             transform: rotate(3deg);
-            opacity: 0.45; /* Adjusted transparency for the brighter palette */
+            opacity: 0.45;
         }
 
         .piece-3 {
@@ -103,7 +101,6 @@
             filter: grayscale(30%) contrast(110%) brightness(55%);
         }
 
-        /* Activate collage state when theme class is on body */
         body.kishibe-theme .collage-bg {
             opacity: 1;
             visibility: visible;
@@ -278,6 +275,7 @@
             font-size: 0.85rem;
             font-weight: bold;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .btn:hover {
@@ -310,6 +308,71 @@
             color: #121010;
         }
 
+        /* Inline Audio Player Styling */
+        .audio-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .audio-track {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .track-name {
+            font-size: 0.85rem;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        audio {
+            width: 100%;
+            filter: invert(90%) hue-rotate(180deg); /* Dark theme integration for audio elements */
+        }
+
+        /* Password Verification Form UI */
+        .password-box {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .password-box input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            background: #1a1717;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-family: inherit;
+            letter-spacing: 0.2em;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .password-box input[type="password"]:focus {
+            border-color: #ffffff;
+        }
+
+        .error-message {
+            color: #ff5555;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            text-transform: uppercase;
+            display: none;
+        }
+
         footer {
             font-size: 0.7rem;
             color: #575454;
@@ -320,7 +383,7 @@
         /* --- 4. KISHIBE SPECIFIC PALETTE & UI STYLES --- */
         body.kishibe-theme {
             background-color: #1c1819;
-            background-image: none; /* Disables standard bg to showcase collage layer */
+            background-image: none;
             color: #e3dcd2;
         }
 
@@ -346,10 +409,10 @@
         }
 
         body.kishibe-theme .link-item {
-            background: rgba(255, 255, 255, 0.03); /* Lighter container box backdrop */
+            background: rgba(255, 255, 255, 0.03);
             border-color: rgba(202, 165, 169, 0.3);
             color: #e3dcd2;
-            backdrop-filter: blur(8px); /* Higher clarity against the brighter background */
+            backdrop-filter: blur(8px);
         }
 
         body.kishibe-theme .link-item:hover {
@@ -388,7 +451,7 @@
         <div class="menu-links">
             <button class="menu-btn active" onclick="switchPage('wurl-page', this, 'wurl')">WURL</button>
             <button class="menu-btn" onclick="switchPage('kishibe-page', this, 'kishibe')">Kishibe</button>
-            <button class="menu-btn" onclick="checkVaultCode(this)">Unreleased</button>
+            <button class="menu-btn" onclick="switchPage('collab-auth-page', this, 'wurl')">Collaborations</button>
         </div>
     </nav>
 
@@ -438,21 +501,63 @@
                 </footer>
             </div>
 
-            <div id="unreleased-page" class="page-panel">
+            <div id="collab-auth-page" class="page-panel">
                 <header>
-                    <p class="subtitle">Classified Audio Archival</p>
-                    <h1>The Vault</h1>
-                    <p class="artist-name">Unreleased Material</p>
+                    <p class="subtitle">Restricted Access Portal</p>
+                    <h1>Protected</h1>
+                    <p class="artist-name">Verification Required</p>
                 </header>
 
-                <div class="link-stack" style="margin-top: 40px;">
-                    <div class="section-title">Exclusive Demos</div>
-                    <a href="#" class="link-item">Track 01 - Demo Snippet (2026)</a>
-                    <a href="#" class="link-item">Track 02 - Rough Mix</a>
+                <div class="password-box">
+                    <div class="subtitle" style="margin-bottom: 20px;">Enter Collaborator Code</div>
+                    <input type="password" id="gatekeeperCode" placeholder="••••••••" onkeydown="if(event.key === 'Enter') verifyGateCode()">
+                    <button class="btn" onclick="verifyGateCode()">Verify</button>
+                    <div id="authError" class="error-message">Invalid Code Sequence</div>
+                </div>
+            </div>
+
+            <div id="instrumentals-page" class="page-panel">
+                <header>
+                    <p class="subtitle">Secure Project Directories</p>
+                    <h1>Instrumentals</h1>
+                    <p class="artist-name">Collaborator Resource Hub</p>
+                </header>
+
+                <div class="audio-container">
+                    <div class="section-title">Tag: Ambient</div>
+                    
+                    <div class="audio-track">
+                        <div class="track-name">Project 3</div>
+                        <audio controls src="Project_3.wav"></audio>
+                    </div>
+
+                    <div class="audio-track">
+                        <div class="track-name">Project 10</div>
+                        <audio controls src="Project_10.wav"></audio>
+                    </div>
+
+                    <div class="audio-track">
+                        <div class="track-name">Project 40</div>
+                        <audio controls src="Project_40.wav"></audio>
+                    </div>
+                </div>
+
+                <div class="audio-container">
+                    <div class="section-title">Tag: Heavier</div>
+
+                    <div class="audio-track">
+                        <div class="track-name">Project 50</div>
+                        <audio controls src="Project_50.wav"></audio>
+                    </div>
+
+                    <div class="audio-track">
+                        <div class="track-name">Project 51</div>
+                        <audio controls src="Project_51.wav"></audio>
+                    </div>
                 </div>
 
                 <footer>
-                    © 2026 Vault Records. Restricted Access.
+                    © 2026 Internal Archival Repository.
                 </footer>
             </div>
 
@@ -461,8 +566,8 @@
 
     <script>
         const sidebar = document.getElementById('sidebarNav');
-        // Define your secret code here
-        const VAULT_CODE = "SECRET2026"; 
+        // Define your secure access key sequence here
+        const MASTER_KEY = "COLLAB2026"; 
 
         function toggleSidebar() {
             sidebar.classList.toggle('open');
@@ -475,7 +580,7 @@
             
             const buttons = document.querySelectorAll('.menu-btn');
             buttons.forEach(b => b.classList.remove('active'));
-            buttonElement.classList.add('active');
+            if (buttonElement) buttonElement.classList.add('active');
             
             if (themeName === 'kishibe') {
                 document.body.classList.add('kishibe-theme');
@@ -485,17 +590,31 @@
             
             sidebar.classList.remove('open');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Clear password inputs and errors when exiting gateway views
+            if(pageId !== 'collab-auth-page') {
+                document.getElementById('gatekeeperCode').value = '';
+                document.getElementById('authError').style.display = 'none';
+            }
         }
 
-        function checkVaultCode(buttonElement) {
-            const userInput = prompt("Enter access code to unlock the vault:");
+        function verifyGateCode() {
+            const inputField = document.getElementById('gatekeeperCode');
+            const errorText = document.getElementById('authError');
             
-            if (userInput === VAULT_CODE) {
-                // If code is correct, load the hidden vault panel using standard theme layout
-                switchPage('unreleased-page', buttonElement, 'wurl');
-            } else if (userInput !== null) {
-                alert("Access Denied. Incorrect Code.");
-                sidebar.classList.remove('open');
+            if (inputField.value === MASTER_KEY) {
+                errorText.style.display = 'none';
+                // Transition inside instrumental panel repository
+                switchPage('instrumentals-page', null, 'wurl');
+                // Keep collaboration button highlighted 
+                const navButtons = document.querySelectorAll('.menu-btn');
+                navButtons.forEach(btn => {
+                    if(btn.textContent.trim() === 'Collaborations') btn.classList.add('active');
+                });
+            } else {
+                errorText.style.display = 'block';
+                inputField.value = '';
+                inputField.focus();
             }
         }
 
