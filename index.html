@@ -333,6 +333,13 @@
             text-transform: uppercase;
         }
 
+        .track-disabled {
+            font-size: 0.85rem;
+            color: #ff5555;
+            letter-spacing: 0.2em;
+            margin-top: 5px;
+        }
+
         audio {
             width: 100%;
             filter: invert(90%) hue-rotate(180deg);
@@ -532,8 +539,8 @@
                     </div>
 
                     <div class="audio-track">
-                        <div class="track-name">N/A</div>
-                        <audio controls src=""></audio>
+                        <div class="track-name">Project 10</div>
+                        <div class="track-disabled">N/A</div>
                     </div>
 
                     <div class="audio-track">
@@ -556,6 +563,20 @@
                     </div>
                 </div>
 
+                <div class="audio-container">
+                    <div class="section-title">Tag: New Indie Wave Style</div>
+
+                    <div class="audio-track">
+                        <div class="track-name">Fall</div>
+                        <audio controls src="instrumentals/Fall.wav"></audio>
+                    </div>
+
+                    <div class="audio-track">
+                        <div class="track-name">Demo</div>
+                        <audio controls src="instrumentals/demo.wav"></audio>
+                    </div>
+                </div>
+
                 <footer>
                     © 2026 Internal Archival Repository.
                 </footer>
@@ -567,19 +588,17 @@
     <script>
         const sidebar = document.getElementById('sidebarNav');
         const MASTER_KEY = "COLLAB2026"; 
-        let isUnlocked = false; // Persistent state for the session
+        let isUnlocked = false; 
 
         function toggleSidebar() {
             sidebar.classList.toggle('open');
         }
 
-        // Updates the URL hash variable directly
         function navigateToHash(hashPath) {
             window.location.hash = hashPath;
             sidebar.classList.remove('open');
         }
 
-        // Processes and shifts page layout cleanly based on active URL route
         function renderPageFromHash() {
             const currentHash = window.location.hash.replace('#', '') || 'wurl';
             
@@ -597,20 +616,17 @@
                 document.getElementById('btn-collaborations').classList.add('active');
                 document.body.classList.remove('kishibe-theme');
                 
-                // Route conditionally based on password verification state
                 if (isUnlocked) {
                     document.getElementById('instrumentals-page').classList.add('active-panel');
                 } else {
                     document.getElementById('collab-auth-page').classList.add('active-panel');
                 }
             } else {
-                // Fallback default: 'wurl'
                 document.getElementById('wurl-page').classList.add('active-panel');
                 document.getElementById('btn-wurl').classList.add('active');
                 document.body.classList.remove('kishibe-theme');
             }
 
-            // Cleanup hidden verification components
             if (currentHash !== 'collaborations') {
                 document.getElementById('gatekeeperCode').value = '';
                 document.getElementById('authError').style.display = 'none';
@@ -625,8 +641,8 @@
             
             if (inputField.value === MASTER_KEY) {
                 errorText.style.display = 'none';
-                isUnlocked = true; // Set lock flag to active
-                renderPageFromHash(); // Refresh view state
+                isUnlocked = true; 
+                renderPageFromHash(); 
             } else {
                 errorText.style.display = 'block';
                 inputField.value = '';
@@ -634,7 +650,6 @@
             }
         }
 
-        // Setup window event handlers to trigger whenever routing hash changes or page boots up
         window.addEventListener('hashchange', renderPageFromHash);
         window.addEventListener('DOMContentLoaded', renderPageFromHash);
 
