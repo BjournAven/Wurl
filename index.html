@@ -14,10 +14,6 @@
 
         body {
             background-color: #121010;
-            background-image: linear-gradient(rgba(18, 16, 16, 0.85), rgba(18, 16, 16, 0.85)), url('background.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             color: #e5e5e5;
             font-family: 'Courier New', Courier, monospace;
             letter-spacing: 0.15em;
@@ -25,7 +21,29 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            transition: background-color 0.5s ease;
+        }
+
+        /* Blurred vignette backdrop, synced to the current release cover art */
+        .bg-cover {
+            position: fixed;
+            top: -5%; left: -5%;
+            width: 110vw; height: 110vh;
+            background-color: #121010;
+            background-size: cover;
+            background-position: center;
+            filter: blur(60px) brightness(0.5) saturate(1.1);
+            transform: scale(1.1);
+            z-index: -2;
+            transition: background-image 0.8s ease;
+        }
+
+        .bg-vignette {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(18,16,16,0.35) 0%, rgba(18,16,16,0.75) 60%, rgba(12,10,10,0.95) 100%);
         }
 
         /* Ambient Grain Texture Layer */
@@ -39,152 +57,10 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
-        /* DYNAMIC KISHIBE COLLAGE BACKGROUND CONTAINER */
-        .collage-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            opacity: 0;
-            visibility: hidden;
-            background-color: #241f20;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-            overflow: hidden;
-        }
-
-        .collage-bg::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(28, 24, 25, 0.2) 0%, rgba(16, 13, 14, 0.85) 80%);
-            z-index: 2;
-        }
-
-        .collage-piece {
-            position: absolute;
-            background-size: cover;
-            background-position: center;
-            filter: grayscale(20%) contrast(115%) brightness(65%);
-            mix-blend-mode: normal;
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .piece-1 {
-            top: -5%;
-            left: -5%;
-            width: 55vw;
-            height: 60vh;
-            background-image: url('cover.jpg');
-            transform: rotate(-4deg);
-        }
-
-        .piece-2 {
-            bottom: -5%;
-            right: -2%;
-            width: 52vw;
-            height: 65vh;
-            background-image: url('art1.jpg');
-            transform: rotate(3deg);
-            opacity: 0.45;
-        }
-
-        .piece-3 {
-            bottom: 15%;
-            left: -3%;
-            width: 42vw;
-            height: 45vh;
-            background-image: url('art2.jpg');
-            transform: rotate(-8deg);
-            filter: grayscale(30%) contrast(110%) brightness(55%);
-        }
-
-        body.kishibe-theme .collage-bg {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* 2. SLIDE-OUT SIDEBAR NAVIGATION */
-        .menu-toggle {
-            position: fixed;
-            top: 25px;
-            left: 25px;
-            background: rgba(18, 16, 16, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            font-size: 1.5rem;
-            padding: 10px 15px;
-            cursor: pointer;
-            z-index: 20;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle:hover {
-            background: #ffffff;
-            color: #121010;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-        }
-
-        nav.sidebar {
-            width: 280px;
-            background: rgba(10, 8, 8, 0.98);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 100px 30px 40px 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-            position: fixed;
-            height: 100vh;
-            top: 0;
-            left: -280px;
-            z-index: 15;
-            transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 10px 0 30px rgba(0,0,0,0.7);
-        }
-
-        nav.sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-brand {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #ffffff;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 15px;
-        }
-
-        .menu-links {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .menu-btn {
-            background: none;
-            border: none;
-            color: #8c8888;
-            font-family: inherit;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            text-align: left;
-            cursor: pointer;
-            transition: color 0.3s ease, padding-left 0.3s ease;
-        }
-
-        .menu-btn:hover, .menu-btn.active {
-            color: #ffffff;
-            padding-left: 8px;
-        }
-
-        /* 3. SCENE AND LAYOUT PANELS */
+        /* 2. LAYOUT PANELS */
         .main-content {
             width: 100%;
-            padding: 120px 40px 60px 40px;
+            padding: 100px 40px 120px 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -199,16 +75,8 @@
             text-align: center;
         }
 
-        .page-panel {
-            display: none;
-        }
-
-        .page-panel.active-panel {
-            display: block;
-        }
-
         /* Typography Hierarchy */
-        header { margin-bottom: 60px; }
+        header { margin-bottom: 80px; }
         h1 {
             font-size: 3.5rem;
             font-weight: 900;
@@ -229,12 +97,65 @@
             letter-spacing: 0.25em;
         }
 
+        /* Poem Section — Fixed on the left margin with vertical line separation */
+        .poem-section {
+            position: fixed;
+            top: 50%;
+            left: 50px;
+            transform: translateY(-50%);
+            width: 260px;
+            text-align: left;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .poem-line {
+            font-style: italic;
+            font-size: 1.05rem;
+            line-height: 2.8; /* Increased spacing */
+            letter-spacing: 0.1em;
+            margin-bottom: 25px; /* Spaced out vertically */
+        }
+
+        .poem-word {
+            color: #ffffff;
+            opacity: 0.12; /* Default state: hidden/faint */
+            transition: opacity 0.4s ease, color 0.4s ease, text-shadow 0.4s ease;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        /* Active highlight state */
+        .poem-word.active {
+            opacity: 1;
+            color: #ffffff;
+            text-shadow: 0 0 14px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Faded past state (as you scroll further down) */
+        .poem-word.faded {
+            opacity: 0.25;
+            color: #7d7878;
+            text-shadow: none;
+        }
+
+        @media (max-width: 1200px) {
+            .poem-section {
+                position: static;
+                transform: none;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 80px;
+                padding: 10px;
+            }
+        }
+
         /* Content Blocks */
         .content-section {
-            margin-bottom: 60px;
+            margin-bottom: 80px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 30px 20px;
+            padding: 40px 20px;
             backdrop-filter: blur(5px);
             display: flex;
             flex-direction: column;
@@ -261,6 +182,14 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             margin-bottom: 25px;
+            background: #1a1717;
+        }
+
+        .release-title {
+            font-size: 0.85rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 20px;
         }
 
         /* Action Targets */
@@ -287,13 +216,14 @@
         .link-stack {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             width: 100%;
+            margin-bottom: 60px;
         }
 
         .link-item {
             display: block;
-            padding: 18px;
+            padding: 22px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: #ffffff;
@@ -308,164 +238,35 @@
             color: #121010;
         }
 
-        /* Inline Audio Player Styling */
-        .audio-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            margin-bottom: 40px;
-            text-align: left;
-        }
-
-        .audio-track {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .track-name {
-            font-size: 0.85rem;
-            color: #ffffff;
-            text-transform: uppercase;
-        }
-
-        .track-disabled {
-            font-size: 0.85rem;
-            color: #ff5555;
-            letter-spacing: 0.2em;
-            margin-top: 5px;
-        }
-
-        audio {
-            width: 100%;
-            filter: invert(90%) hue-rotate(180deg);
-        }
-
-        /* Password Verification Form UI */
-        .password-box {
-            max-width: 400px;
-            margin: 40px auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-        }
-
-        .password-box input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            background: #1a1717;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            font-family: inherit;
-            letter-spacing: 0.2em;
-            text-align: center;
-            margin-bottom: 20px;
-            outline: none;
-        }
-
-        .password-box input[type="password"]:focus {
-            border-color: #ffffff;
-        }
-
-        .error-message {
-            color: #ff5555;
-            font-size: 0.75rem;
-            margin-top: 10px;
-            text-transform: uppercase;
-            display: none;
-        }
-
         footer {
             font-size: 0.7rem;
             color: #575454;
-            padding: 40px 0;
+            padding: 60px 0 20px 0;
             line-height: 1.8;
         }
 
-        /* --- 4. KISHIBE SPECIFIC PALETTE & UI STYLES --- */
-        body.kishibe-theme {
-            background-color: #1c1819;
-            background-image: none;
-            color: #e3dcd2;
-        }
-
-        body.kishibe-theme .menu-toggle {
-            background: rgba(28, 24, 25, 0.8);
-            border: 1px solid rgba(196, 154, 108, 0.2);
-            color: #e3dcd2;
-        }
-
-        body.kishibe-theme nav.sidebar {
-            background: rgba(20, 17, 18, 0.99);
-            border-right: 1px solid rgba(196, 154, 108, 0.15);
-        }
-
-        body.kishibe-theme .sidebar-brand { color: #caa5a9; }
-        body.kishibe-theme .menu-btn.active { color: #d1b48c; }
-
-        body.kishibe-theme #kishibe-page h1 { color: #caa5a9; } 
-        body.kishibe-theme #kishibe-page .subtitle { color: #c49a6c; } 
-        body.kishibe-theme #kishibe-page .section-title { 
-            color: #caa5a9; 
-            border-left-color: #c49a6c; 
-        }
-
-        body.kishibe-theme .link-item {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(202, 165, 169, 0.3);
-            color: #e3dcd2;
-            backdrop-filter: blur(8px);
-        }
-
-        body.kishibe-theme .link-item:hover {
-            background: #c49a6c;
-            color: #1c1819;
-            box-shadow: 0 0 15px rgba(196, 154, 108, 0.2);
-        }
-
-        /* --- 5. RESPONSIVE DESIGN --- */
-        @media (max-width: 768px) {
-            .collage-piece { opacity: 0.35; }
-            .piece-1 { width: 80vw; height: 40vh; }
-            .piece-2 { width: 80vw; height: 40vh; }
-            .piece-3 { display: none; }
-        }
-
+        /* 3. RESPONSIVE DESIGN */
         @media (max-width: 600px) {
-            .main-content { padding: 100px 20px 20px 20px; }
+            .main-content { padding: 60px 20px 20px 20px; }
             h1 { font-size: 2.2rem; }
-            nav.sidebar { width: 240px; left: -240px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="collage-bg">
-        <div class="collage-piece piece-1"></div>
-        <div class="collage-piece piece-2"></div>
-        <div class="collage-piece piece-3"></div>
-    </div>
+    <div class="bg-cover" id="bgCover"></div>
+    <div class="bg-vignette"></div>
 
-    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-
-    <nav class="sidebar" id="sidebarNav">
-        <div class="sidebar-brand">Portal</div>
-        <div class="menu-links">
-            <button class="menu-btn active" id="btn-wurl" onclick="navigateToHash('wurl')">WURL</button>
-            <button class="menu-btn" id="btn-kishibe" onclick="navigateToHash('kishibe')">Kishibe</button>
-            <button class="menu-btn" id="btn-collaborations" onclick="navigateToHash('collaborations')">Collaborations</button>
-        </div>
-    </nav>
+    <section class="poem-section" id="poemSection">
+        <p class="poem-line">You forever hold your grace,</p>
+        <p class="poem-line">While my wrist remain undone,</p>
+        <p class="poem-line">and my ribs laced</p>
+    </section>
 
     <main class="main-content">
         <div class="container">
 
-            <div id="wurl-page" class="page-panel active-panel">
+            <div id="wurl-page">
                 <header>
                     <p class="subtitle">Wrist Undone, Ribs laced</p>
                     <h1>WURL</h1>
@@ -474,8 +275,9 @@
 
                 <section class="content-section">
                     <div class="section-title">Latest Release</div>
-                    <img src="cover.jpg" alt="WURL cover" class="display-img">
-                    <a href="https://open.spotify.com/track/1sKFZELaBva7ps20K2SugK?si=a9911303c5ad4695" target="_blank" class="btn">Listen Now</a>
+                    <img id="latestReleaseImg" src="cover.jpg" alt="WURL latest release" class="display-img">
+                    <div id="latestReleaseTitle" class="release-title"></div>
+                    <a id="latestReleaseLink" href="https://open.spotify.com/track/1sKFZELaBva7ps20K2SugK?si=a9911303c5ad4695" target="_blank" class="btn">Listen Now</a>
                 </section>
 
                 <div class="link-stack">
@@ -483,6 +285,7 @@
                     <a href="https://open.spotify.com/artist/1FZaXOqY9gZZ9uIPwDF9JH?si=FXdjYp13QyaDpMxuPo4owA" target="_blank" class="link-item">Spotify Profile</a>
                     <a href="https://music.apple.com/us/artist/wurl/6775261857" target="_blank" class="link-item">Apple Music</a>
                     <a href="https://instagram.com/wurllol" target="_blank" class="link-item">Instagram</a>
+                    <a href="https://www.tiktok.com/@wristundoneribslaced" target="_blank" class="link-item">TikTok</a>
                     <a href="mailto:rightunder@gmail.com" class="link-item">Contact</a>
                 </div>
 
@@ -491,174 +294,98 @@
                 </footer>
             </div>
 
-            <div id="kishibe-page" class="page-panel">
-                <header>
-                    <p class="subtitle">Vocalist/Artist</p>
-                    <h1>Kishibe</h1>
-                    <p class="artist-name">Giovanni Fabien Malapitan Rodriguez</p>
-                </header>
-
-                <div class="link-stack" style="margin-top: 40px;">
-                    <div class="section-title">Business & Network</div>
-                    <a href="mailto:Kshbe0x@gmail.com" class="link-item">Inquiries: Kshbe0x@gmail.com</a>
-                </div>
-
-                <footer>
-                    © 2026 Kishibe. All Rights Reserved.<br>Giovanni Fabien Malapitan Rodriguez.
-                </footer>
-            </div>
-
-            <div id="collab-auth-page" class="page-panel">
-                <header>
-                    <p class="subtitle">Restricted Access Portal</p>
-                    <h1>Protected</h1>
-                    <p class="artist-name">Verification Required</p>
-                </header>
-
-                <div class="password-box">
-                    <div class="subtitle" style="margin-bottom: 20px;">Enter Collaborator Code</div>
-                    <input type="password" id="gatekeeperCode" placeholder="••••••••" onkeydown="if(event.key === 'Enter') verifyGateCode()">
-                    <button class="btn" onclick="verifyGateCode()">Verify</button>
-                    <div id="authError" class="error-message">Invalid Code Sequence</div>
-                </div>
-            </div>
-
-            <div id="instrumentals-page" class="page-panel">
-                <header>
-                    <p class="subtitle">Secure Project Directories</p>
-                    <h1>Instrumentals</h1>
-                    <p class="artist-name">Collaborator Resource Hub</p>
-                </header>
-
-                <div class="audio-container">
-                    <div class="section-title">Tag: Ambient</div>
-                    
-                    <div class="audio-track">
-                        <div class="track-name">Project 3</div>
-                        <audio controls src="instrumentals/Project_3.wav"></audio>
-                    </div>
-
-                    <div class="audio-track">
-                        <div class="track-name">Project 10</div>
-                        <div class="track-disabled">N/A</div>
-                    </div>
-
-                    <div class="audio-track">
-                        <div class="track-name">Project 40</div>
-                        <audio controls src="instrumentals/Project_40.wav"></audio>
-                    </div>
-                </div>
-
-                <div class="audio-container">
-                    <div class="section-title">Tag: Heavier</div>
-
-                    <div class="audio-track">
-                        <div class="track-name">Project 50</div>
-                        <audio controls src="instrumentals/Project_50.wav"></audio>
-                    </div>
-
-                    <div class="audio-track">
-                        <div class="track-name">Project 51</div>
-                        <audio controls src="instrumentals/Project_51.wav"></audio>
-                    </div>
-                </div>
-
-                <div class="audio-container">
-                    <div class="section-title">Tag: New Indie Wave Style</div>
-
-                    <div class="audio-track">
-                        <div class="track-name">Fall</div>
-                        <audio controls src="instrumentals/Fall.wav"></audio>
-                    </div>
-
-                    <div class="audio-track">
-                        <div class="track-name">Demo</div>
-                        <audio controls src="instrumentals/demo.wav"></audio>
-                    </div>
-                </div>
-
-                <footer>
-                    © 2026 Internal Archival Repository.
-                </footer>
-            </div>
-
         </div>
     </main>
 
     <script>
-        const sidebar = document.getElementById('sidebarNav');
-        const MASTER_KEY = "lol"; 
-        let isUnlocked = false; 
+        // --- LATEST RELEASE COVER ART AUTO-SYNC ---
+        const LATEST_RELEASE_URL = "https://open.spotify.com/track/1sKFZELaBva7ps20K2SugK?si=a9911303c5ad4695";
 
-        function toggleSidebar() {
-            sidebar.classList.toggle('open');
-        }
+        async function syncLatestRelease() {
+            const img = document.getElementById('latestReleaseImg');
+            const titleEl = document.getElementById('latestReleaseTitle');
+            const link = document.getElementById('latestReleaseLink');
+            const bgCover = document.getElementById('bgCover');
 
-        function navigateToHash(hashPath) {
-            window.location.hash = hashPath;
-            sidebar.classList.remove('open');
-        }
+            link.href = LATEST_RELEASE_URL;
+            bgCover.style.backgroundImage = "url('cover.jpg')";
 
-        function renderPageFromHash() {
-            const currentHash = window.location.hash.replace('#', '') || 'wurl';
-            
-            const panels = document.querySelectorAll('.page-panel');
-            panels.forEach(p => p.classList.remove('active-panel'));
-            
-            const buttons = document.querySelectorAll('.menu-btn');
-            buttons.forEach(b => b.classList.remove('active'));
+            try {
+                const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(LATEST_RELEASE_URL)}`;
+                const res = await fetch(oembedUrl);
+                if (!res.ok) throw new Error('oEmbed request failed');
+                const data = await res.json();
 
-            if (currentHash === 'kishibe') {
-                document.getElementById('kishibe-page').classList.add('active-panel');
-                document.getElementById('btn-kishibe').classList.add('active');
-                document.body.classList.add('kishibe-theme');
-            } else if (currentHash === 'collaborations') {
-                document.getElementById('btn-collaborations').classList.add('active');
-                document.body.classList.remove('kishibe-theme');
-                
-                if (isUnlocked) {
-                    document.getElementById('instrumentals-page').classList.add('active-panel');
-                } else {
-                    document.getElementById('collab-auth-page').classList.add('active-panel');
+                if (data.thumbnail_url) {
+                    img.src = data.thumbnail_url;
+                    bgCover.style.backgroundImage = `url('${data.thumbnail_url}')`;
                 }
-            } else {
-                document.getElementById('wurl-page').classList.add('active-panel');
-                document.getElementById('btn-wurl').classList.add('active');
-                document.body.classList.remove('kishibe-theme');
-            }
-
-            if (currentHash !== 'collaborations') {
-                document.getElementById('gatekeeperCode').value = '';
-                document.getElementById('authError').style.display = 'none';
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function verifyGateCode() {
-            const inputField = document.getElementById('gatekeeperCode');
-            const errorText = document.getElementById('authError');
-            
-            if (inputField.value === MASTER_KEY) {
-                errorText.style.display = 'none';
-                isUnlocked = true; 
-                renderPageFromHash(); 
-            } else {
-                errorText.style.display = 'block';
-                inputField.value = '';
-                inputField.focus();
+                if (data.title) {
+                    titleEl.textContent = data.title;
+                }
+            } catch (err) {
+                console.warn('Could not fetch latest Spotify release art, using fallback image.', err);
             }
         }
 
-        window.addEventListener('hashchange', renderPageFromHash);
-        window.addEventListener('DOMContentLoaded', renderPageFromHash);
+        window.addEventListener('DOMContentLoaded', syncLatestRelease);
 
-        document.addEventListener('click', function(e) {
-            const toggleBtn = document.querySelector('.menu-toggle');
-            if (!sidebar.contains(e.target) && e.target !== toggleBtn && sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
+        // --- DYNAMIC POEM SCROLL REVEAL & FADE ---
+        function setupPoemReveal() {
+            const poemSection = document.getElementById('poemSection');
+            const lines = poemSection.querySelectorAll('.poem-line');
+
+            // Wrap each word in a span tag
+            lines.forEach(line => {
+                const words = line.textContent.trim().split(/\s+/);
+                line.innerHTML = words
+                    .map(w => `<span class="poem-word">${w}</span>`)
+                    .join(' ');
+            });
+
+            const wordEls = Array.from(poemSection.querySelectorAll('.poem-word'));
+            let ticking = false;
+
+            function updateReveal() {
+                // Calculate page scroll percentage (0.0 to 1.0)
+                const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                
+                const scrollProgress = scrollHeight > 0 ? Math.min(1, Math.max(0, scrollTop / scrollHeight)) : 0;
+
+                // Determine active index based on scroll position
+                const activeIndex = Math.floor(scrollProgress * (wordEls.length + 1));
+                
+                // Number of words staying illuminated at one time
+                const activeWindow = 3; 
+
+                wordEls.forEach((word, i) => {
+                    word.classList.remove('active', 'faded');
+                    
+                    if (i >= activeIndex - activeWindow && i <= activeIndex) {
+                        word.classList.add('active'); // Currently active word(s)
+                    } else if (i < activeIndex - activeWindow) {
+                        word.classList.add('faded');  // Past words fade out
+                    }
+                    // Remaining words default to dim/unrevealed
+                });
+
+                ticking = false;
             }
-        });
+
+            function onScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(updateReveal);
+                    ticking = true;
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll);
+            updateReveal();
+        }
+
+        window.addEventListener('DOMContentLoaded', setupPoemReveal);
     </script>
 
 </body>
