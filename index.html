@@ -18,9 +18,43 @@
             font-family: 'Courier New', Courier, monospace;
             letter-spacing: 0.15em;
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+        }
+
+        /* Announcement Bar */
+        .announcement-bar {
+            width: 100%;
+            background: #ffffff;
+            color: #121010;
+            text-align: center;
+            padding: 12px 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: bold;
+            position: relative;
+            z-index: 20;
+        }
+
+        .announcement-bar a {
+            color: #121010;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: opacity 0.2s ease;
+        }
+
+        .announcement-bar a:hover {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 600px) {
+            .announcement-bar {
+                font-size: 0.7rem;
+                padding: 10px 10px;
+            }
         }
 
         /* Blurred vignette backdrop, synced to the current release cover art */
@@ -285,6 +319,10 @@
 
     <div class="bg-cover" id="bgCover"></div>
     <div class="bg-vignette"></div>
+
+    <div class="announcement-bar">
+        $100 Editing Competition Soon! — <a href="https://discord.gg/CnQyBEgGd2" target="_blank">discord.gg/CnQyBEgGd2</a>
+    </div>
 
     <main class="main-content">
         <div class="container">
