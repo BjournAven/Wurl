@@ -24,39 +24,6 @@
             position: relative;
         }
 
-        /* Announcement Bar */
-        .announcement-bar {
-            width: 100%;
-            background: #ffffff;
-            color: #121010;
-            text-align: center;
-            padding: 12px 15px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: bold;
-            position: relative;
-            z-index: 20;
-        }
-
-        .announcement-bar a {
-            color: #121010;
-            text-decoration: underline;
-            text-underline-offset: 3px;
-            transition: opacity 0.2s ease;
-        }
-
-        .announcement-bar a:hover {
-            opacity: 0.6;
-        }
-
-        @media (max-width: 600px) {
-            .announcement-bar {
-                font-size: 0.7rem;
-                padding: 10px 10px;
-            }
-        }
-
         /* Blurred vignette backdrop, synced to the current release cover art */
         .bg-cover {
             position: fixed;
@@ -216,6 +183,23 @@
             width: 100%;
         }
 
+        /* Releases grid — supports 1 or many releases without layout breaking */
+        .releases-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .release-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 320px;
+        }
+
         .display-img {
             width: 100%;
             max-width: 320px;
@@ -320,10 +304,6 @@
     <div class="bg-cover" id="bgCover"></div>
     <div class="bg-vignette"></div>
 
-    <div class="announcement-bar">
-        $100 Editing Competition Soon! — <a href="https://discord.gg/CnQyBEgGd2" target="_blank">discord.gg/CnQyBEgGd2</a>
-    </div>
-
     <main class="main-content">
         <div class="container">
 
@@ -342,10 +322,10 @@
                 </section>
 
                 <section class="content-section">
-                    <div class="section-title">Latest Release</div>
-                    <img id="latestReleaseImg" src="cover.jpg" alt="WURL latest release" class="display-img">
-                    <div id="latestReleaseTitle" class="release-title"></div>
-                    <a id="latestReleaseLink" href="https://open.spotify.com/track/6e4aWDujrVSPqIQtsXrwY8?si=9e4ea88fde0149ff" target="_blank" class="btn">Listen Now</a>
+                    <div class="section-title">Releases</div>
+                    <div class="releases-grid" id="releasesGrid">
+                        <!-- Release cards are injected here from the RELEASES list below -->
+                    </div>
                 </section>
 
                 <div class="link-stack">
@@ -366,37 +346,78 @@
     </main>
 
     <script>
-        // --- LATEST RELEASE COVER ART AUTO-SYNC ---
-        const LATEST_RELEASE_URL = "https://open.spotify.com/track/6e4aWDujrVSPqIQtsXrwY8?si=9e4ea88fde0149ff";
+        // --- RELEASES ---
+        // Add/edit releases here. Replace each "url" with the real Spotify track
+        // link — the cover art + title are pulled live from Spotify's oEmbed API.
+        const RELEASES = [
+            {
+                name: "SAUDADE",
+                url: "https://open.spotify.com/track/1sKFZELaBva7ps20K2SugK?si=a63746ea1b7e4147"
+            },
+            {
+                name: "Flowers That Follow",
+                url: "https://open.spotify.com/track/6e4aWDujrVSPqIQtsXrwY8?si=86957e2d6a2944e8"
+            }
+        ];
 
-        async function syncLatestRelease() {
-            const img = document.getElementById('latestReleaseImg');
-            const titleEl = document.getElementById('latestReleaseTitle');
-            const link = document.getElementById('latestReleaseLink');
+        async function syncReleases() {
+            const grid = document.getElementById('releasesGrid');
             const bgCover = document.getElementById('bgCover');
+            let bgSet = false;
 
-            link.href = LATEST_RELEASE_URL;
-            bgCover.style.backgroundImage = "url('cover.jpg')";
+            grid.innerHTML = '';
 
-            try {
-                const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(LATEST_RELEASE_URL)}`;
-                const res = await fetch(oembedUrl);
-                if (!res.ok) throw new Error('oEmbed request failed');
-                const data = await res.json();
+            for (const release of RELEASES) {
+                const card = document.createElement('div');
+                card.className = 'release-card';
 
-                if (data.thumbnail_url) {
-                    img.src = data.thumbnail_url;
-                    bgCover.style.backgroundImage = `url('${data.thumbnail_url}')`;
+                const img = document.createElement('img');
+                img.className = 'display-img';
+                img.alt = `${release.name} — WURL`;
+                img.src = 'cover.jpg'; // fallback until oEmbed resolves
+
+                const title = document.createElement('div');
+                title.className = 'release-title';
+                title.textContent = release.name;
+
+                const link = document.createElement('a');
+                link.className = 'btn';
+                link.href = release.url;
+                link.target = '_blank';
+                link.textContent = 'Listen Now';
+
+                card.appendChild(img);
+                card.appendChild(title);
+                card.appendChild(link);
+                grid.appendChild(card);
+
+                try {
+                    const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(release.url)}`;
+                    const res = await fetch(oembedUrl);
+                    if (!res.ok) throw new Error('oEmbed request failed');
+                    const data = await res.json();
+
+                    if (data.thumbnail_url) {
+                        img.src = data.thumbnail_url;
+                        if (!bgSet) {
+                            bgCover.style.backgroundImage = `url('${data.thumbnail_url}')`;
+                            bgSet = true;
+                        }
+                    }
+                    if (data.title) {
+                        title.textContent = data.title;
+                    }
+                } catch (err) {
+                    console.warn(`Could not fetch Spotify art for "${release.name}", using fallback image.`, err);
                 }
-                if (data.title) {
-                    titleEl.textContent = data.title;
-                }
-            } catch (err) {
-                console.warn('Could not fetch latest Spotify release art, using fallback image.', err);
+            }
+
+            if (!bgSet) {
+                bgCover.style.backgroundImage = "url('cover.jpg')";
             }
         }
 
-        window.addEventListener('DOMContentLoaded', syncLatestRelease);
+        window.addEventListener('DOMContentLoaded', syncReleases);
 
         // --- DYNAMIC POEM SCROLL REVEAL & FADE ---
         function setupPoemReveal() {
