@@ -240,6 +240,44 @@
             transform: translateY(-2px);
         }
 
+        /* Discord Callout — same content-section shell, subtle glow so it reads as
+           a moment worth noticing without pulling focus off the music */
+        .discord-section {
+            border-color: rgba(88, 101, 242, 0.3);
+            animation: discordPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes discordPulse {
+            0%, 100% { box-shadow: 0 0 0 rgba(88, 101, 242, 0); border-color: rgba(88, 101, 242, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(88, 101, 242, 0.12); border-color: rgba(88, 101, 242, 0.45); }
+        }
+
+        .discord-eyebrow {
+            font-size: 0.65rem;
+            color: #8b97f5;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .discord-text {
+            font-size: 0.85rem;
+            color: #cfcccc;
+            line-height: 1.9;
+            max-width: 460px;
+            margin-bottom: 28px;
+        }
+
+        .btn-discord {
+            border-color: #5865F2;
+        }
+
+        .btn-discord:hover {
+            background: #5865F2;
+            border-color: #5865F2;
+            color: #ffffff;
+        }
+
         .link-stack {
             display: flex;
             flex-direction: column;
@@ -319,6 +357,12 @@
                     <p class="poem-line">I am swallowing the dust of your wake.</p>
                     <p class="poem-line">My wrist remain undone.</p>
                     <p class="poem-line">And my ribs, laced.</p>
+                </section>
+
+                <section class="content-section discord-section">
+                    <div class="discord-eyebrow">✦ Before Anyone Else</div>
+                    <p class="discord-text">Sneak peeks, giveaways, and competitions are landing in the Discord soon. Get in now so you're not catching it late.</p>
+                    <a href="https://discord.gg/CnQyBEgGd2" target="_blank" class="btn btn-discord">Join The Discord</a>
                 </section>
 
                 <section class="content-section">
