@@ -109,6 +109,66 @@
             order: 2;
         }
 
+        /* Discord Featured Callout Section */
+        .discord-feature-section {
+            order: 3;
+            margin-bottom: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 45px 30px;
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s ease;
+        }
+
+        .discord-feature-section:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .discord-tag {
+            font-size: 0.75rem;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .discord-title {
+            font-size: 1.4rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 0.15em;
+        }
+
+        .discord-caption {
+            font-size: 0.85rem;
+            color: #b0adad;
+            line-height: 1.8;
+            max-width: 540px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .discord-btn {
+            background: #ffffff;
+            color: #121010;
+            padding: 16px 45px;
+            border: 1px solid #ffffff;
+            text-shadow: none;
+        }
+
+        .discord-btn:hover {
+            background: transparent;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
         /* Poem Section — Desktop Sidebar vs Mobile Block */
         .poem-section {
             position: fixed;
@@ -152,15 +212,15 @@
         }
 
         .link-stack { 
-            order: 4; 
+            order: 5; 
             margin-bottom: 60px; 
         }
 
         footer { 
-            order: 5; 
+            order: 6; 
         }
 
-        /* Responsive Layout Switch for Poem (Positioned BELOW Releases on Mobile) */
+        /* Responsive Layout Switch for Poem (Positioned BELOW Releases/Discord on Mobile) */
         @media (max-width: 1200px) {
             .poem-section {
                 position: relative;
@@ -172,7 +232,7 @@
                 text-align: center;
                 margin: 0 auto 60px auto;
                 padding: 0 20px;
-                order: 3;
+                order: 4;
             }
             .poem-line {
                 line-height: 2.2;
@@ -387,9 +447,12 @@
                 line-height: 1.8;
                 margin-bottom: 10px;
             }
-            .content-section {
-                padding: 25px 15px;
+            .content-section, .discord-feature-section {
+                padding: 30px 15px;
                 margin-bottom: 40px;
+            }
+            .discord-title {
+                font-size: 1.1rem;
             }
             .link-item {
                 padding: 16px;
@@ -419,6 +482,18 @@
                 </div>
             </section>
 
+            <!-- PROMINENT DISCORD CALLOUT SECTION -->
+            <section class="discord-feature-section">
+                <span class="discord-tag">Official Server</span>
+                <h2 class="discord-title">Join The Community</h2>
+                <p class="discord-caption">
+                    Get unreleased music sneak peeks, behind-the-scenes content, and participate in upcoming community events.
+                </p>
+                <a href="https://discord.gg/d7FbV2z9yP" target="_blank" rel="noopener noreferrer" class="btn discord-btn">
+                    Join Discord Server
+                </a>
+            </section>
+
             <section class="poem-section" id="poemSection">
                 <p class="poem-line">While I choke on what you leave behind,</p>
                 <p class="poem-line">I am swallowing the dust of your wake.</p>
@@ -430,6 +505,7 @@
                 <div class="section-title">Platforms</div>
                 <a href="https://open.spotify.com/artist/1FZaXOqY9gZZ9uIPwDF9JH?si=FXdjYp13QyaDpMxuPo4owA" target="_blank" class="link-item">Spotify Profile</a>
                 <a href="https://music.apple.com/us/artist/wurl/6775261857" target="_blank" class="link-item">Apple Music</a>
+                <a href="https://discord.gg/d7FbV2z9yP" target="_blank" rel="noopener noreferrer" class="link-item">Discord Server</a>
                 <a href="https://instagram.com/wurllol" target="_blank" class="link-item">Instagram</a>
                 <a href="https://www.tiktok.com/@wristundoneribslaced" target="_blank" class="link-item">TikTok</a>
                 <a href="mailto:rightunder@gmail.com" class="link-item">Contact</a>
