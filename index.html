@@ -106,12 +106,12 @@
 
         /* Releases section placement */
         .releases-section {
-            order: 2;
+            order: 3;
         }
 
         /* Discord Featured Callout Section */
         .discord-feature-section {
-            order: 3;
+            order: 4;
             margin-bottom: 80px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -169,6 +169,125 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
+        /* Pre-Save Attention Section */
+        .presave-section {
+            order: 2;
+            margin-bottom: 80px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 45px 30px;
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
+            animation: presavePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes presavePulse {
+            0%, 100% {
+                border-color: rgba(255, 255, 255, 0.25);
+                box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
+            }
+            50% {
+                border-color: rgba(255, 255, 255, 0.6);
+                box-shadow: 0 0 40px rgba(255, 255, 255, 0.25);
+            }
+        }
+
+        .presave-tag {
+            font-size: 0.75rem;
+            color: #121010;
+            background: #ffffff;
+            padding: 4px 14px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: bold;
+        }
+
+        .presave-cover {
+            width: 100%;
+            max-width: 260px;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            margin-bottom: 25px;
+            background: #1a1717;
+        }
+
+        .presave-title {
+            font-size: 1.5rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 0.15em;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            overflow-wrap: break-word;
+            max-width: 100%;
+        }
+
+        .presave-release-name {
+            font-size: 0.8rem;
+            color: #b0adad;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            letter-spacing: 0.15em;
+        }
+
+        .presave-countdown {
+            display: flex;
+            gap: 22px;
+            margin-bottom: 30px;
+        }
+
+        .presave-countdown-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 42px;
+        }
+
+        .presave-countdown-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .presave-countdown-label {
+            font-size: 0.6rem;
+            color: #8c8888;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 4px;
+        }
+
+        .presave-caption {
+            font-size: 0.85rem;
+            color: #b0adad;
+            line-height: 1.8;
+            max-width: 540px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .presave-btn {
+            background: #ffffff;
+            color: #121010;
+            padding: 16px 45px;
+            border: 1px solid #ffffff;
+            text-shadow: none;
+        }
+
+        .presave-btn:hover {
+            background: transparent;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
         /* Poem Section — Desktop Sidebar vs Mobile Block */
         .poem-section {
             position: fixed;
@@ -212,12 +331,12 @@
         }
 
         .link-stack { 
-            order: 5; 
+            order: 6; 
             margin-bottom: 60px; 
         }
 
         footer { 
-            order: 6; 
+            order: 7; 
         }
 
         /* Responsive Layout Switch for Poem (Positioned BELOW Releases/Discord on Mobile) */
@@ -232,7 +351,7 @@
                 text-align: center;
                 margin: 0 auto 60px auto;
                 padding: 0 20px;
-                order: 4;
+                order: 5;
             }
             .poem-line {
                 line-height: 2.2;
@@ -447,12 +566,24 @@
                 line-height: 1.8;
                 margin-bottom: 10px;
             }
-            .content-section, .discord-feature-section {
+            .content-section, .discord-feature-section, .presave-section {
                 padding: 30px 15px;
                 margin-bottom: 40px;
             }
             .discord-title {
                 font-size: 1.1rem;
+            }
+            .presave-title {
+                font-size: 1.15rem;
+            }
+            .presave-cover {
+                max-width: 200px;
+            }
+            .presave-countdown {
+                gap: 12px;
+            }
+            .presave-countdown-value {
+                font-size: 1.4rem;
             }
             .link-item {
                 padding: 16px;
@@ -474,6 +605,38 @@
                 <h1>WURL</h1>
                 <p class="artist-name">Aven Bjourn Gilbert</p>
             </header>
+
+            <!-- PRE-SAVE ATTENTION SECTION -->
+            <section class="presave-section" id="presaveSection" data-release-date="2026-09-08T00:00:00">
+                <span class="presave-tag">Coming Soon</span>
+                <img class="presave-cover" src="presave-cover.jpg" alt="Notice There's Got To Be Somebody Out There — Cover Art">
+                <h2 class="presave-title">Notice There's Got To Be Somebody Out There</h2>
+                <p class="presave-release-name">Out September 8</p>
+                <div class="presave-countdown" id="presaveCountdown">
+                    <div class="presave-countdown-unit">
+                        <span class="presave-countdown-value" id="cdDays">00</span>
+                        <span class="presave-countdown-label">Days</span>
+                    </div>
+                    <div class="presave-countdown-unit">
+                        <span class="presave-countdown-value" id="cdHours">00</span>
+                        <span class="presave-countdown-label">Hrs</span>
+                    </div>
+                    <div class="presave-countdown-unit">
+                        <span class="presave-countdown-value" id="cdMins">00</span>
+                        <span class="presave-countdown-label">Min</span>
+                    </div>
+                    <div class="presave-countdown-unit">
+                        <span class="presave-countdown-value" id="cdSecs">00</span>
+                        <span class="presave-countdown-label">Sec</span>
+                    </div>
+                </div>
+                <p class="presave-caption" id="presaveCaption">
+                    Be first to hear it. Pre-save now and it lands straight in your library the moment it drops.
+                </p>
+                <a href="https://distrokid.com/hyperfollow/wurl/notice-theres-got-to-be-somebody-out-there/" target="_blank" rel="noopener noreferrer" class="btn presave-btn" id="presaveBtn">
+                    Pre-Save Now
+                </a>
+            </section>
 
             <section class="content-section releases-section">
                 <div class="section-title">Releases</div>
@@ -677,10 +840,55 @@
             updateReveal();
         }
 
+        // --- PRE-SAVE COUNTDOWN ---
+        function setupPresaveCountdown() {
+            const section = document.getElementById('presaveSection');
+            if (!section) return;
+
+            const target = new Date(section.dataset.releaseDate).getTime();
+            const countdownEl = document.getElementById('presaveCountdown');
+            const tagEl = section.querySelector('.presave-tag');
+            const captionEl = document.getElementById('presaveCaption');
+            const btnEl = document.getElementById('presaveBtn');
+
+            let timer = null;
+
+            function pad(n) {
+                return String(n).padStart(2, '0');
+            }
+
+            function update() {
+                const diff = target - Date.now();
+
+                if (diff <= 0) {
+                    if (countdownEl) countdownEl.style.display = 'none';
+                    if (tagEl) tagEl.textContent = 'Out Now';
+                    if (captionEl) captionEl.textContent = 'The wait is over — stream it everywhere now.';
+                    if (btnEl) btnEl.textContent = 'Listen Now';
+                    if (timer) clearInterval(timer);
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / (1000 * 60)) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('cdDays').textContent = pad(days);
+                document.getElementById('cdHours').textContent = pad(hours);
+                document.getElementById('cdMins').textContent = pad(mins);
+                document.getElementById('cdSecs').textContent = pad(secs);
+            }
+
+            update();
+            timer = setInterval(update, 1000);
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             syncReleases();
             setupModalEvents();
             setupPoemReveal();
+            setupPresaveCountdown();
         });
     </script>
 
