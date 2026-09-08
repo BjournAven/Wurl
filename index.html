@@ -97,10 +97,98 @@
             text-transform: uppercase;
             margin-bottom: 10px;
         }
-        /* Releases section placement */
+        /* Featured Release Section */
+        .featured-section {
+            order: 2;
+            margin-bottom: 80px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .featured-card {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .featured-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .featured-img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .featured-info {
+            text-align: left;
+            flex: 1;
+        }
+
+        .featured-label {
+            font-size: 0.7rem;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .featured-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .featured-btn {
+            margin-top: 20px;
+            background: #ffffff;
+            color: #121010;
+            font-weight: bold;
+        }
+
         .releases-section {
             order: 3;
         }
+
+        @media (max-width: 768px) {
+
+            .featured-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+            .featured-info {
+                text-align: center;
+            }
+            .featured-img {
+                width: 180px;
+                height: 180px;
+            }
+            .featured-title {
+                font-size: 1.8rem;
+            }
+        }
+
 
         /* Discord Featured Callout Section */
         .discord-feature-section {
@@ -467,7 +555,20 @@
                 <h1>WURL</h1>
             </header>
 
+            <!-- FEATURED DROP SECTION -->
+            <section class="featured-section">
+                <div class="featured-card">
+                    <img src="https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02148cb2a252dece400ddc4660" alt="Nichevo — WURL" class="featured-img">
+                    <div class="featured-info">
+                        <span class="featured-label">Latest Drop</span>
+                        <h2 class="featured-title">NICHEVO</h2>
+                        <a href="https://open.spotify.com/track/5Hf4u7kQQ2LhgaekuZY4Ts?si=39009491c4144d0f" target="_blank" class="btn featured-btn">Listen Now</a>
+                    </div>
+                </div>
+            </section>
+
             <section class="content-section releases-section">
+
                 <div class="section-title">Releases</div>
                 <div class="releases-grid" id="releasesGrid">
                     <!-- Release card dynamically loaded -->
@@ -619,7 +720,11 @@
             if (!bgSet) {
                 bgCover.style.backgroundImage = "url('cover.jpg')";
             }
+
+            // Ensure the latest drop (featured song) takes priority for the background
+            bgCover.style.backgroundImage = "url('https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02148cb2a252dece400ddc4660')";
         }
+
 
         // --- DYNAMIC POEM SCROLL REVEAL & FADE ---
         function setupPoemReveal() {
