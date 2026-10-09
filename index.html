@@ -98,9 +98,15 @@
             margin-bottom: 10px;
         }
 
+        /* Latest Release Section */
+        .latest-release-section {
+            order: 2;
+            margin-bottom: 60px;
+        }
+
         /* Discord Featured Callout Section (Primary Focal Point) */
         .discord-feature-section {
-            order: 2;
+            order: 3;
             margin-bottom: 80px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -162,7 +168,7 @@
 
         /* Releases Section */
         .releases-section {
-            order: 3;
+            order: 4;
         }
 
         /* Poem Section — Desktop Sidebar vs Mobile Block */
@@ -208,12 +214,12 @@
         }
 
         .link-stack { 
-            order: 5; 
+            order: 6; 
             margin-bottom: 60px; 
         }
 
         footer { 
-            order: 6; 
+            order: 7; 
         }
 
         /* Responsive Layout Switch for Poem */
@@ -228,7 +234,7 @@
                 text-align: center;
                 margin: 0 auto 60px auto;
                 padding: 0 20px;
-                order: 4;
+                order: 5;
             }
             .poem-line {
                 line-height: 2.2;
@@ -470,6 +476,14 @@
                 <h1>WURL</h1>
             </header>
 
+            <!-- LATEST RELEASE SECTION -->
+            <section class="content-section latest-release-section">
+                <div class="section-title">Latest Release</div>
+                <div class="releases-grid" id="latestReleaseGrid">
+                    <!-- Dynamically loaded latest release -->
+                </div>
+            </section>
+
             <!-- PROMINENT DISCORD CALLOUT SECTION (PRIMARY FOCAL POINT) -->
             <section class="discord-feature-section">
                 <span class="discord-tag">Official Server</span>
@@ -482,7 +496,7 @@
                 </a>
             </section>
 
-            <!-- RELEASES SECTION (FLOWERS THAT FOLLOW) -->
+            <!-- RELEASES SECTION -->
             <section class="content-section releases-section">
                 <div class="section-title">Releases</div>
                 <div class="releases-grid" id="releasesGrid">
@@ -518,13 +532,22 @@
     <div class="modal-overlay" id="listenModal">
         <div class="modal-card">
             <button class="modal-close" id="modalCloseBtn">&times;</button>
-            <div class="modal-title" id="modalTitle">Flowers That Follow</div>
+            <div class="modal-title" id="modalTitle">Latest Release</div>
             <div class="modal-links-list" id="modalLinks"></div>
         </div>
     </div>
 
     <script>
-        // --- SINGLE RELEASE: FLOWERS THAT FOLLOW ---
+        // --- LATEST RELEASE: EP DROP ---
+        const LATEST_RELEASE = {
+            name: "EP Drop",
+            url: "https://open.spotify.com/album/5d73z6OmYFhVt2ajn62pis?si=t3kHQtpuQuKmv78XmYzyUw",
+            destinations: [
+                { name: "SPOTIFY", url: "https://open.spotify.com/album/5d73z6OmYFhVt2ajn62pis?si=t3kHQtpuQuKmv78XmYzyUw" }
+            ]
+        };
+
+        // --- PREVIOUS RELEASES ---
         const RELEASES = [
             {
                 name: "Flowers That Follow",
@@ -569,62 +592,73 @@
             });
         }
 
-        async function syncReleases() {
-            const grid = document.getElementById('releasesGrid');
-            const bgCover = document.getElementById('bgCover');
-            let bgSet = false;
+        async function renderReleaseCard(release, gridElement, isLatest = false) {
+            const card = document.createElement('div');
+            card.className = 'release-card';
 
-            grid.innerHTML = '';
+            const img = document.createElement('img');
+            img.className = 'display-img';
+            img.alt = `${release.name} — WURL`;
+            img.src = 'cover.jpg'; 
 
-            for (const release of RELEASES) {
-                const card = document.createElement('div');
-                card.className = 'release-card';
+            const title = document.createElement('div');
+            title.className = 'release-title';
+            title.textContent = release.name;
 
-                const img = document.createElement('img');
-                img.className = 'display-img';
-                img.alt = `${release.name} — WURL`;
-                img.src = 'cover.jpg'; 
+            const link = document.createElement('button');
+            link.className = 'btn';
+            link.type = 'button';
+            link.textContent = 'Listen Now';
 
-                const title = document.createElement('div');
-                title.className = 'release-title';
-                title.textContent = release.name;
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                openDestinationModal(release);
+            });
 
-                const link = document.createElement('button');
-                link.className = 'btn';
-                link.type = 'button';
-                link.textContent = 'Listen Now';
+            card.appendChild(img);
+            card.appendChild(title);
+            card.appendChild(link);
+            gridElement.appendChild(card);
 
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    openDestinationModal(release);
-                });
+            try {
+                const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(release.url)}`;
+                const res = await fetch(oembedUrl);
+                if (!res.ok) throw new Error('oEmbed request failed');
+                const data = await res.json();
 
-                card.appendChild(img);
-                card.appendChild(title);
-                card.appendChild(link);
-                grid.appendChild(card);
-
-                try {
-                    const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(release.url)}`;
-                    const res = await fetch(oembedUrl);
-                    if (!res.ok) throw new Error('oEmbed request failed');
-                    const data = await res.json();
-
-                    if (data.thumbnail_url) {
-                        img.src = data.thumbnail_url;
-                        bgCover.style.backgroundImage = `url('${data.thumbnail_url}')`;
-                        bgSet = true;
-                    }
-                } catch (err) {
-                    console.warn(`Could not fetch Spotify cover art dynamically for "${release.name}". Using local fallback.`, err);
+                if (data.title && release.name === "EP Drop") {
+                    release.name = data.title;
+                    title.textContent = data.title;
                 }
-            }
 
-            if (!bgSet) {
-                bgCover.style.backgroundImage = "url('cover.jpg')";
+                if (data.thumbnail_url) {
+                    img.src = data.thumbnail_url;
+                    if (isLatest) {
+                        const bgCover = document.getElementById('bgCover');
+                        bgCover.style.backgroundImage = `url('${data.thumbnail_url}')`;
+                    }
+                }
+            } catch (err) {
+                console.warn(`Could not fetch Spotify cover art dynamically for "${release.name}". Using local fallback.`, err);
             }
         }
 
+        async function syncReleases() {
+            const latestGrid = document.getElementById('latestReleaseGrid');
+            latestGrid.innerHTML = '';
+            await renderReleaseCard(LATEST_RELEASE, latestGrid, true);
+
+            const grid = document.getElementById('releasesGrid');
+            grid.innerHTML = '';
+            for (const release of RELEASES) {
+                await renderReleaseCard(release, grid, false);
+            }
+
+            const bgCover = document.getElementById('bgCover');
+            if (!bgCover.style.backgroundImage) {
+                bgCover.style.backgroundImage = "url('cover.jpg')";
+            }
+        }
 
         // --- DYNAMIC POEM SCROLL REVEAL & FADE ---
         function setupPoemReveal() {
