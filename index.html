@@ -538,12 +538,12 @@
     </div>
 
     <script>
-        // --- LATEST RELEASE: EP DROP ---
+        // --- LATEST RELEASE ---
         const LATEST_RELEASE = {
-            name: "EP Drop",
-            url: "https://open.spotify.com/album/5d73z6OmYFhVt2ajn62pis?si=t3kHQtpuQuKmv78XmYzyUw",
+            name: "New Release",
+            url: "https://open.spotify.com/album/3Z2CNNk7FNctmA5fEQscUi",
             destinations: [
-                { name: "SPOTIFY", url: "https://open.spotify.com/album/5d73z6OmYFhVt2ajn62pis?si=t3kHQtpuQuKmv78XmYzyUw" }
+                { name: "SPOTIFY", url: "https://open.spotify.com/album/3Z2CNNk7FNctmA5fEQscUi" }
             ]
         };
 
@@ -626,7 +626,7 @@
                 if (!res.ok) throw new Error('oEmbed request failed');
                 const data = await res.json();
 
-                if (data.title && release.name === "EP Drop") {
+                if (data.title) {
                     release.name = data.title;
                     title.textContent = data.title;
                 }
